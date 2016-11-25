@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class RandomPlayer extends Player
 {
-	public RandomPlayer(int alignment) 
+	public RandomPlayer(PlayerType alignment) 
 	{
 		super(alignment);
 	}
@@ -12,7 +12,7 @@ public class RandomPlayer extends Player
 	@Override
 	public void setName() 
 	{
-		this.name = "Hi I'm Random";
+		this.name = "Random"; // Set your player name
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class RandomPlayer extends Player
 	}
 
 	
-	private LinkedList <BoardMove> generateAllMoves (Board board, int symbol)
+	private LinkedList <BoardMove> generateAllMoves (Board board, PlayerType symbol)
 	{
 		LinkedList<BoardMove> toReturn = new LinkedList<>();
 		
@@ -32,7 +32,7 @@ public class RandomPlayer extends Player
 		{
 			for (int j = 0; j < board.arr[0].length; j++)
 			{
-				if (board.arr[i][j] == 0)
+				if (board.arr[i][j] == PlayerType.EMPTY)
 				{
 					toReturn.add(new BoardMove(i, j, symbol));
 				}

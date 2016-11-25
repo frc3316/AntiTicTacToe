@@ -1,16 +1,16 @@
 /**
- * Subclasses of this class can be players in a tic-tac-toe game.
- * @author Idan
+ * Subclasses of this class can be players in an anti-tic-tac-toe game.
+ * @author Ofir
  *
  */
-public abstract class Player implements Symbol
+public abstract class Player
 {
-	String name = ""; //the name of the player
-	public final int symbol; //what symbol is this player playing - 1 means X, 2 means O
+	String name = ""; // the name of the player
+	public final PlayerType symbol; // the name of the player (A or B)
 	
-	public Player (int alignment)
+	public Player (PlayerType symbol)
 	{
-		this.symbol = alignment;
+		this.symbol = symbol;
 	}
 	
 	/**
@@ -25,16 +25,11 @@ public abstract class Player implements Symbol
 	 */
 	public abstract BoardMove playTurn (Board board);
 	
-	/**
-	 * Returns the string representation of this player.
-	 */
-	public String toString ()
-	{	
-		String s = name + " playing as ";
-		if (symbol == X) s += "X";
-		else if (symbol == O) s += "O";
-		
-		
-		return s;
+	public PlayerType getSymbol() {
+		return symbol;
+	}
+	
+	public String toString() {
+		return name; 
 	}
 }
