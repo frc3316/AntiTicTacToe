@@ -1,0 +1,57 @@
+
+public class OmriHaZaian extends Player{
+
+	private boolean start;
+	private Board oldBoard;
+	
+	public OmriHaZaian(PlayerType symbol) {
+		super(symbol);
+		switch(symbol){
+			case A:
+				start = true;
+				break;
+			case B:
+				start = false;
+				break;
+			default:
+				start = false;
+				break;
+		}
+	}
+
+	@Override
+	public void setName() {
+		this.name = "Tickle My Pickle 4 a Nickle";
+	}
+	
+	public boolean isHorse(int x1, int y1, int x2, int y2){
+		
+	}
+	
+	public void starter(Board board){
+		if(board.arr[1][1] == PlayerType.EMPTY){
+			board
+		}
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				
+			}
+		}
+	}
+	
+	public void seconder(Board board){
+		
+	}
+	
+	@Override
+	public BoardMove playTurn(Board board) {
+		if(start){
+			starter (board);
+		}
+		else{
+			seconder(board);
+		}
+		return null;
+	}
+
+}

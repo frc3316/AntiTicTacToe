@@ -1,0 +1,124 @@
+import java.util.LinkedList;
+
+
+public class OmriHaZaian extends Player{
+
+	private boolean start;
+	private Board oldBoard;
+	public static int counter = 0;
+	
+	public OmriHaZaian(PlayerType symbol) {
+		super(symbol);
+	}
+
+	@Override
+	public void setName() {
+		this.name = "Tickle My Pickle 4 a Nickle";
+	}
+	
+	public boolean isHorse(int x1, int y1, int x2, int y2){
+		int dx = Math.abs(x1 - x2);
+		int dy = Math.abs(y1 - y2);
+		if(dx == 2 && dy == 1){
+			return true;
+		}
+		else if(dx == 1 && dy == 2){
+			return true;
+		}
+		return false;
+	}
+	
+	public BoardMove starter(Board board){
+		if(board.arr[1][1] == PlayerType.EMPTY){
+			return new BoardMove(1, 1, symbol);
+		}
+		else{
+			return getNoLooseMove(board, horseMoves(board));
+		}
+	}
+	
+	public int[] getOppMove(Board board){
+		int[] opmove = new int[2];
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr.length; j++) {
+				if(board.arr[i][j] != oldBoard.arr[i][j] && board.arr[i][j] != symbol){
+					opmove[0] = i;
+					opmove[1] = j;
+				}
+			}
+		}
+		return opmove;
+	}
+	
+	public LinkedList<BoardMove> horseMoves(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<>();
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				int[] op = getOppMove(board);
+				if(isHorse(op[0], op[1], i, j))
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
+	public BoardMove getNoLooseMove(Board board, LinkedList<BoardMove> moves){
+		BoardMove bm = null;
+		for (BoardMove boardMove : moves) {
+			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
+			if(!oldBoard.winner()){
+				bm = boardMove;
+			}
+			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
+		}
+		return bm;
+	}
+	
+	public LinkedList<BoardMove> genMoves(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<>();
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(board.arr[i][j] == PlayerType.EMPTY)
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
+	public BoardMove seconder(Board board){
+		return null;
+	}
+	
+	public boolean isStarting(Board board){
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(board.arr[i][j] != PlayerType.EMPTY){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public BoardMove playTurn(Board board) {
+		if(isEmpty(board)){
+			start = true;
+		}
+		else{
+			System.out.println("Board is empty!!!!\n\n\n\n");
+			start = false;
+		}
+		BoardMove bm = null;
+		if(start){
+			bm = starter (board);
+		}
+		else{
+			bm = seconder(board);
+			System.out.println("Not Starting look at me!!!!!!\n\n\n\n");
+		}
+		this.oldBoard = board;
+		return bm;
+	}
+
+}

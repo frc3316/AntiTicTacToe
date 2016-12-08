@@ -1,0 +1,28 @@
+
+public class OmriHaZaian extends Player{
+
+	private boolean start;
+	
+	public OmriHaZaian(PlayerType symbol) {
+		super(symbol);
+		switch(symbol){
+			case A:
+				start = true;
+			case B:
+				start = false;
+		}
+	}
+
+	@Override
+	public void setName() {
+		// TODO Auto-generated method stub
+		this.name = "Batool101";
+	}
+	
+	@Override
+	public BoardMove playTurn(Board board) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

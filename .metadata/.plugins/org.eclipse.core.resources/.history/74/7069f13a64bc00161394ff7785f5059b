@@ -1,0 +1,45 @@
+
+public class OmriHaZaian extends Player{
+
+	private boolean start;
+	
+	public OmriHaZaian(PlayerType symbol) {
+		super(symbol);
+		switch(symbol){
+			case A:
+				start = true;
+				break;
+			case B:
+				start = false;
+				break;
+			default:
+				start = false;
+				break;
+		}
+	}
+
+	@Override
+	public void setName() {
+		this.name = "Tickle My Pickle for a Nickel";
+	}
+	
+	public void starter(Board board){
+		
+	}
+	
+	public void seconder(Board board){
+		
+	}
+	
+	@Override
+	public BoardMove playTurn(Board board) {
+		if(start){
+			starter (board);
+		}
+		else{
+			seconder(board);
+		}
+		return null;
+	}
+
+}

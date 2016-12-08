@@ -1,0 +1,165 @@
+import java.util.LinkedList;
+
+
+public class OmriHaZaian extends Player{
+
+	private boolean start;
+	private Board oldBoard;
+	public static int counter = 0;
+	
+	public OmriHaZaian(PlayerType symbol) {
+		super(symbol);
+	}
+
+	@Override
+	public void setName() {
+		this.name = "Tickle My Pickle 4 a Nickle";
+	}
+	
+	public boolean isReflection(int x1, int y1, int x2, int y2){
+		int dx = Math.abs(x1 - x2);
+		int dy = Math.abs(y1 - y2);
+		if(dx == 2 && dy == 0){
+			return true;
+		}
+		else if(dx == 0 && dy == 2){
+			return true;
+		}
+		return false;
+	}
+	public boolean isHorse(int x1, int y1, int x2, int y2){
+		int dx = Math.abs(x1 - x2);
+		int dy = Math.abs(y1 - y2);
+		if(dx == 2 && dy == 1){
+			return true;
+		}
+		else if(dx == 1 && dy == 2){
+			return true;
+		}
+		return false;
+	}
+
+	
+	public int[] getOppMove(Board board){
+		int[] opmove = {0,0};
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(board.arr[i][j] != oldBoard.arr[i][j] && board.arr[i][j] != symbol){
+					opmove[0] = i;
+					opmove[1] = j;
+				}
+			}
+		}
+		return opmove;
+	}
+	
+	public LinkedList<BoardMove> horseMoves(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<>();
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				int[] op = getOppMove(board);
+				if(isHorse(op[0], op[1], i, j) && board.arr[i][j] == PlayerType.EMPTY)
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
+	//Gets horse moves and returns the only move that is not a losing move
+	public BoardMove getNoLooseMove(Board board, LinkedList<BoardMove> moves){
+		BoardMove bm = null;
+		for (BoardMove boardMove : moves) {
+			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
+			if(!oldBoard.winner()){
+				bm = boardMove;
+			}
+			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
+		}
+		return bm;
+	}
+	
+	//Generates all ok moves
+	//for the player that starts
+	public LinkedList<BoardMove> genMoves(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<>();
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(board.arr[i][j] == PlayerType.EMPTY)
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
+	public LinkedList<BoardMove> reflectionMoves(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<BoardMove>();
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				System.out.println("Opponent");
+				int[] op = new int[2];
+				System.out.println("Ok");
+				op = getOppMove(board);
+				if(isReflection(op[0], op[1], i, j) && board.arr[i][j] == PlayerType.EMPTY)
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
+	public BoardMove seconder(Board board){
+		if(board.arr[1][1] == PlayerType.EMPTY){
+			System.out.println("Look here:::: " + reflectionMoves(board));
+			return getNoLooseMove(board, reflectionMoves(board));
+		}
+		else{
+			BoardMove move = getNoLooseMove(board, genMoves(board));
+			if(move == null){
+				return new BoardMove(0,0,symbol);
+			}
+			return move;
+		}
+	}
+	
+	public BoardMove starter(Board board){
+		if(board.arr[1][1] == PlayerType.EMPTY){
+			return new BoardMove(1, 1, symbol);
+		}
+		else{
+			return getNoLooseMove(board, horseMoves(board));
+		}
+	}
+	
+	/**
+	 * checks if starting
+	 * if the board is empty or the counter is zugi you start
+	 * else the you are not starting*/
+	public boolean isStarting(Board board){
+		int counter = 0;
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(board.arr[i][j] != PlayerType.EMPTY){
+					counter++;
+				}
+			}
+		}
+		if(counter%2 == 0){
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public BoardMove playTurn(Board board) {
+		BoardMove bm = null;
+		if(isStarting(board)){
+			bm = starter (board);
+		}
+		else{
+			System.out.println("Not Starting look at me!!!!!!\n\n\n\n");
+			bm = seconder(board);
+		}
+		this.oldBoard = board;
+		return bm;
+	}
+
+}
