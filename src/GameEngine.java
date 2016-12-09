@@ -9,8 +9,8 @@ public class GameEngine {
 		/*
 		 * Players to be configured here
 		 */
-		Player player1 = new RandomPlayer(PlayerType.A);
-		Player player2 = new RandomPlayer(PlayerType.B);
+		Player player1 = new Stav(PlayerType.A);
+		Player player2 = new Stav(PlayerType.B);
 
 		player1.setName();
 		player2.setName();
