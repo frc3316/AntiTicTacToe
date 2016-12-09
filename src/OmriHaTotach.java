@@ -29,7 +29,7 @@ public class OmriHaTotach extends Player{
 			PlayerType np = (cp == PlayerType.A) ? PlayerType.B : PlayerType.A;
 			scores[i] = getSum(getBestMove(b, np));
 		}
-		System.out.println(board);
+		
 		return scores;
 	}
 	
@@ -69,6 +69,8 @@ public class OmriHaTotach extends Player{
 	public BoardMove playTurn(Board board) {
 		LinkedList<BoardMove> moves = getMoves(board);
 		int scores[] = getBestMove(board, symbol);
-		return moves.get(getBiggest(scores));
+		BoardMove bm = (moves.size() > 8) ? new BoardMove(1, 1, symbol) : moves.get(getBiggest(scores)); 
+		return bm;
 	}
+
 }
