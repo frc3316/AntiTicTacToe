@@ -71,5 +71,4 @@ public class OmriHaTotach extends Player{
 		int scores[] = getBestMove(board, symbol);
 		return moves.get(getBiggest(scores));
 	}
-
 }
