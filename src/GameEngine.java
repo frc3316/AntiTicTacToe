@@ -3,13 +3,13 @@ public class GameEngine {
 	PlayerType playerStarts = PlayerType.EMPTY;
 
 	// Change the number of games here:
-	final int maxGames = 100;
+	final int maxGames = 1000;
 
 	public void runGame() {
 		/*
 		 * Players to be configured here
 		 */
-		Player player1 = new RandomPlayer(PlayerType.A);
+		Player player1 = new Nir(PlayerType.A);
 		Player player2 = new RandomPlayer(PlayerType.B);
 
 		player1.setName();
@@ -17,7 +17,7 @@ public class GameEngine {
 		
 		totalGames++;
 
-		playerStarts = playerStarts == PlayerType.A ? PlayerType.B : PlayerType.A;
+		playerStarts = playerStarts == PlayerType.A ? PlayerType.B : PlayerType.B;
 
 		Board board = new Board();
 
