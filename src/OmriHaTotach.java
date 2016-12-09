@@ -1,12 +1,13 @@
 import java.util.LinkedList;
 
 
-public class OmriHaTotach extends Player{
+public class OmriHaZaian extends Player{
 
+	private boolean start;
 	private Board oldBoard;
 	public static int counter = 0;
 	
-	public OmriHaTotach(PlayerType symbol) {
+	public OmriHaZaian(PlayerType symbol) {
 		super(symbol);
 		oldBoard = new Board();
 	}
@@ -17,7 +18,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//Generates all reflection moves
-	private boolean isReflection(int x1, int y1, int x2, int y2){
+	public boolean isReflection(int x1, int y1, int x2, int y2){
 		int dx = Math.abs(x1 - x2);
 		int dy = Math.abs(y1 - y2);
 		if(dx == 2 && dy == 0){
@@ -72,15 +73,18 @@ public class OmriHaTotach extends Player{
 	
 	//gets a list of moves and chooses the non loosing one
 	private BoardMove getNoLooseMove(Board board, LinkedList<BoardMove> moves){
-		BoardMove bm = moves.get(0);
-		for (BoardMove boardMove : moves) {
-			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
-			if(!oldBoard.winner()){
-				bm = boardMove;
+		if(moves != null && moves.size() > 0){
+			BoardMove bm = moves.get(0);
+			for (BoardMove boardMove : moves) {
+				oldBoard.insert(boardMove);
+				if(!oldBoard.winner()){
+					bm = boardMove;
+				}
+				oldBoard.arr[boardMove.y][boardMove.x] = PlayerType.EMPTY;
 			}
-			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
+			return bm;
 		}
-		return bm;
+		return null;
 	}
 	
 	//generates all possible moves
@@ -93,6 +97,21 @@ public class OmriHaTotach extends Player{
 			}
 		}
 		return moves;
+	}
+	
+	//checks if the other player can even play anywhere
+	private boolean willWin(Board board, BoardMove bm){
+		Board b = new Board(board);
+		LinkedList<BoardMove> moves = genMoves(board);
+		for (BoardMove boardMove : moves) {
+			b = new Board(board);
+			b.insert(bm);
+			b.insert(boardMove);
+			if(!b.winner()){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	//gets all possible reflection moves
@@ -108,15 +127,30 @@ public class OmriHaTotach extends Player{
 		return moves;
 	}
 	
+	private LinkedList<BoardMove> getWillWin(Board board){
+		LinkedList<BoardMove> moves = new LinkedList<BoardMove>();
+		int[] op = getOppMove(board);
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[i].length; j++) {
+				if(willWin(board, new BoardMove(i, j, symbol)))
+					moves.add(new BoardMove(i, j, symbol));
+			}
+		}
+		return moves;
+	}
+	
 	//When the player goes second he goes to a reflection tactics 
 	private BoardMove seconder(Board board){
 		if(board.arr[1][1] == PlayerType.EMPTY){
 			return getNoLooseMove(board, reflectionMoves(board));
 		}
 		else{
-			BoardMove move = getNoLooseMove(board, genMoves(board));
+			BoardMove move = getNoLooseMove(board, getWillWin(board));
 			if(move == null){
-				return new BoardMove(0,0,symbol);
+				move = getNoLooseMove(board, genMoves(board));
+				if(move == null){
+					move = new BoardMove(0, 0, symbol);
+				}
 			}
 			return move;
 		}
