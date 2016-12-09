@@ -10,7 +10,7 @@ public class GameEngine {
 		 * Players to be configured here
 		 */
 		Player player1 = new RandomPlayer(PlayerType.A);
-		Player player2 = new RandomPlayer(PlayerType.B);
+		Player player2 = new DanPlayer(PlayerType.B);
 
 		player1.setName();
 		player2.setName();
@@ -44,7 +44,7 @@ public class GameEngine {
 					player1Score++;
 				break;
 			} else if (board.arr[next.x][next.y] != PlayerType.EMPTY) {
-				System.out.println("\t" + currentPlayer + " lost because he tried playing in an already taken space");
+				System.out.println("\t" + currentPlayer + " lost because he tried playing in an already taken space" +next.x+","+next.y);
 				if (currentPlayer.getSymbol() == PlayerType.A)
 					player2Score++;
 				else
@@ -68,8 +68,9 @@ public class GameEngine {
 		if (board.winner()) {
 			Player winnerPlayer = currentPlayer.getSymbol() == PlayerType.A ? player2 : player1;
 			System.out.println("\t" + winnerPlayer + " wins!");
-			if (winnerPlayer.getSymbol() == PlayerType.A)
+			if (winnerPlayer.getSymbol() == PlayerType.A){
 				player1Score++;
+				System.out.println("------------------------------------------------------------------------------");}
 			else
 				player2Score++;
 		}

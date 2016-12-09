@@ -1,4 +1,4 @@
-/**
+ /**
  * An object holding x and y coordinates of a tile in the board.
  * @author Ofir
  *
