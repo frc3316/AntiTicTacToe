@@ -17,7 +17,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//Generates all reflection moves
-	public boolean isReflection(int x1, int y1, int x2, int y2){
+	private boolean isReflection(int x1, int y1, int x2, int y2){
 		int dx = Math.abs(x1 - x2);
 		int dy = Math.abs(y1 - y2);
 		if(dx == 2 && dy == 0){
@@ -31,7 +31,7 @@ public class OmriHaTotach extends Player{
 		}
 		return false;
 	}
-	public boolean isHorse(int x1, int y1, int x2, int y2){
+	private boolean isHorse(int x1, int y1, int x2, int y2){
 		int dx = Math.abs(x1 - x2);
 		int dy = Math.abs(y1 - y2);
 		if(dx == 2 && dy == 1){
@@ -44,7 +44,7 @@ public class OmriHaTotach extends Player{
 	}
 
 	//gets opponent's move
-	public int[] getOppMove(Board board){
+	private int[] getOppMove(Board board){
 		int[] opmove = {0,0};
 		for (int i = 0; i < board.arr.length; i++) {
 			for (int j = 0; j < board.arr[i].length; j++) {
@@ -58,7 +58,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//gets all possible horse moves
-	public LinkedList<BoardMove> horseMoves(Board board){
+	private LinkedList<BoardMove> horseMoves(Board board){
 		LinkedList<BoardMove> moves = new LinkedList<>();
 		int[] op = getOppMove(board);
 		for (int i = 0; i < board.arr.length; i++) {
@@ -71,7 +71,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//gets a list of moves and chooses the non loosing one
-	public BoardMove getNoLooseMove(Board board, LinkedList<BoardMove> moves){
+	private BoardMove getNoLooseMove(Board board, LinkedList<BoardMove> moves){
 		BoardMove bm = moves.get(0);
 		for (BoardMove boardMove : moves) {
 			oldBoard.arr[boardMove.y][boardMove.x] = symbol;
@@ -84,7 +84,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//generates all possible moves
-	public LinkedList<BoardMove> genMoves(Board board){
+	private LinkedList<BoardMove> genMoves(Board board){
 		LinkedList<BoardMove> moves = new LinkedList<>();
 		for (int i = 0; i < board.arr.length; i++) {
 			for (int j = 0; j < board.arr[i].length; j++) {
@@ -96,7 +96,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//gets all possible reflection moves
-	public LinkedList<BoardMove> reflectionMoves(Board board){
+	private LinkedList<BoardMove> reflectionMoves(Board board){
 		LinkedList<BoardMove> moves = new LinkedList<BoardMove>();
 		int[] op = getOppMove(board);
 		for (int i = 0; i < board.arr.length; i++) {
@@ -109,7 +109,7 @@ public class OmriHaTotach extends Player{
 	}
 	
 	//When the player goes second he goes to a reflection tactics 
-	public BoardMove seconder(Board board){
+	private BoardMove seconder(Board board){
 		if(board.arr[1][1] == PlayerType.EMPTY){
 			return getNoLooseMove(board, reflectionMoves(board));
 		}
@@ -124,7 +124,7 @@ public class OmriHaTotach extends Player{
 	
 	//When the player goes first
 	//wins all the time
-	public BoardMove starter(Board board){
+	private BoardMove starter(Board board){
 		if(board.arr[1][1] == PlayerType.EMPTY){
 			return new BoardMove(1, 1, symbol);
 		}
@@ -137,7 +137,7 @@ public class OmriHaTotach extends Player{
 	 * checks if starting
 	 * if the board is empty or the counter is zugi you start
 	 * else the you are not starting*/
-	public boolean isStarting(Board board){
+	private boolean isStarting(Board board){
 		int counter = 0;
 		for (int i = 0; i < board.arr.length; i++) {
 			for (int j = 0; j < board.arr[i].length; j++) {
