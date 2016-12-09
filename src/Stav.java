@@ -1,47 +1,39 @@
 
 import java.util.LinkedList;
 
-public class Stav extends Player
-{
-	public void setName()
-	{
+public class Stav extends Player {
+	public void setName() {
 		this.name = "Stav";
 	}
 
-	public Stav(PlayerType symbol)
-	{
+	public Stav(PlayerType symbol) {
 		super(symbol);
 	}
 
 	@Override
-	public BoardMove playTurn(Board board)
-	{
+	public BoardMove playTurn(Board board) {
 		LinkedList<BoardMove> availableMoves = generateAllMoves(board, symbol);
+		if (availableMoves.size() == 9)
+			return new BoardMove(1, 1, symbol);
 		int[] scores = new int[availableMoves.size()];
 		scores = minimax(board, symbol, 0);
 		return availableMoves.get(maximalValuePosition(scores));
 	}
 
-	private int score(Board board, PlayerType currentPlayer)
-	{
-		if (board.winner() && currentPlayer == symbol)
-		{
-			return 10;
+	private int score(Board board, PlayerType currentPlayer, int depth) {
+		if (board.winner() && currentPlayer == symbol) {
+			return 10 - depth;
 		}
 
-		return -10;
+		return depth - 10;
 	}
 
-	private LinkedList<BoardMove> generateAllMoves(Board board, PlayerType symbol)
-	{
+	private LinkedList<BoardMove> generateAllMoves(Board board, PlayerType symbol) {
 		LinkedList<BoardMove> toReturn = new LinkedList<>();
 
-		for (int i = 0; i < board.arr.length; i++)
-		{
-			for (int j = 0; j < board.arr[0].length; j++)
-			{
-				if (board.arr[i][j] == PlayerType.EMPTY)
-				{
+		for (int i = 0; i < board.arr.length; i++) {
+			for (int j = 0; j < board.arr[0].length; j++) {
+				if (board.arr[i][j] == PlayerType.EMPTY) {
 					toReturn.add(new BoardMove(i, j, symbol));
 				}
 			}
@@ -50,13 +42,11 @@ public class Stav extends Player
 		return toReturn;
 	}
 
-	private int[] minimax(Board board, PlayerType currentPlayer, int depth)
-	{
+	private int[] minimax(Board board, PlayerType currentPlayer, int depth) {
 
-		if (board.winner())
-		{
+		if (board.winner()) {
 			int[] scores = new int[1];
-			scores[0] = score(board, currentPlayer);
+			scores[0] = score(board, currentPlayer, depth);
 			return scores;
 		}
 
@@ -66,8 +56,7 @@ public class Stav extends Player
 
 		depth++;
 
-		for (int i = 0; i < availableMoves.size(); i++)
-		{
+		for (int i = 0; i < availableMoves.size(); i++) {
 			BoardMove possibleMove = availableMoves.get(i);
 			Board newBoard = new Board(board);
 			insertPossibleBoardMove(newBoard, possibleMove);
@@ -78,32 +67,26 @@ public class Stav extends Player
 
 	}
 
-	private Board insertPossibleBoardMove(Board board, BoardMove boardmove)
-	{
+	private Board insertPossibleBoardMove(Board board, BoardMove boardmove) {
 		Board newBoard = board;
 		newBoard.arr[boardmove.x][boardmove.y] = boardmove.symbol;
 		return newBoard;
 	}
 
-	private int arraySum(int[] array)
-	{
+	private int arraySum(int[] array) {
 		int sum = 0;
-		for (int i = 0; i < array.length; i++)
-		{
+		for (int i = 0; i < array.length; i++) {
 			sum += array[i];
 		}
 
 		return sum;
 	}
 
-	private int maximalValuePosition(int[] array)
-	{
+	private int maximalValuePosition(int[] array) {
 		int maxValue = array[0];
 		int maxValuePosition = 0;
-		for (int i = 0; i < array.length; i++)
-		{
-			if (array[i] > maxValue)
-			{
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] > maxValue) {
 				maxValue = array[i];
 				maxValuePosition = i;
 			}
@@ -112,11 +95,9 @@ public class Stav extends Player
 		return maxValuePosition;
 	}
 
-	private void printArray(int[] array)
-	{
+	private void printArray(int[] array) {
 		String str = "[";
-		for (int i = 0; i < array.length; i++)
-		{
+		for (int i = 0; i < array.length; i++) {
 
 			str += i != array.length - 1 ? array[i] + ", " : array[i];
 		}

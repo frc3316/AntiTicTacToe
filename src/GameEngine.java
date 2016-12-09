@@ -3,14 +3,14 @@ public class GameEngine {
 	PlayerType playerStarts = PlayerType.EMPTY;
 
 	// Change the number of games here:
-	final int maxGames = 100;
+	final int maxGames = 1000;
 
 	public void runGame() {
 		/*
 		 * Players to be configured here
 		 */
 		Player player1 = new Stav(PlayerType.A);
-		Player player2 = new Stav(PlayerType.B);
+		Player player2 = new RandomPlayer(PlayerType.B);
 
 		player1.setName();
 		player2.setName();
